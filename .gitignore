@@ -1,0 +1,14 @@
+# Archivos de simulación de Icarus Verilog
+*.out
+*.vcd
+
+# Archivos temporales del sistema
+*.log
+*.tmp
+
+# Archivos de backup
+*~
+*.bak
+
+# Carpeta de build (si usas make u otros)
+build/
