@@ -1,4 +1,6 @@
 /** @file
+    IMPORTANTE: Este archivo fue dado por el profesor del curso
+    
 	Implement a 16-sequence LFSR
 */
 
