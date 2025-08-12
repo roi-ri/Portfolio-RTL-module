@@ -1,0 +1,2 @@
+# Sistemas_Digitales_2-IE0523
+En este repositorio se almacena el trabajo realizado en el curso: IE-0523 Sistemas Digitales II 
