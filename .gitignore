@@ -12,3 +12,6 @@
 
 # Carpeta de build (si usas make u otros)
 build/
+
+
+.DS_Store
