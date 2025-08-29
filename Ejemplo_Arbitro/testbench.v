@@ -10,13 +10,13 @@ module arbiter_tb;
   initial begin
 	$dumpfile("resultados.vcd");
 	$dumpvars(-1, U0);
-	$monitor ("req0=%b,req1=%b,gnt0=%b,gnt1=%b", req0,req1,gnt0,gnt1);
+	$monitor ("req0=%b,req1=%b,gnt0=%b,gnt1=%b", req0,req1,gnt0,gnt1); // Imprimir señales para monitoreo
   end
 
   arbiter U0 (
     .clock (clock),
     .reset (reset),
-    .req_0 (req0),
+    .req_0 (req0), // Mala practica, se debe de llamar igual el cable al que se conecta
     .req_1 (req1),
     .gnt_0 (gnt0),
     .gnt_1 (gnt1)
