@@ -1,5 +1,5 @@
 // Modulo del controlador del cajero
-module Controlador(
+module controlador(
     // Entradas 
     input clk; 
     input reset; 
