@@ -23,7 +23,7 @@ module Controlador(
 );
 
 // Definicion de estados 
-localparam  PIN_CORRECTO                = 16'h7259, //PIN CORRECTO DESIGNADO 
+localparam  PIN_CORRECTO                = 16'b7259, //PIN CORRECTO DESIGNADO 
             ESPERANDO_TARJETA           = 4'b0001,
             ESPERANDO_PIN               = 4'b0010,
             BLOQUEO                     = 4'b0101,
@@ -87,7 +87,8 @@ always @(*) begin
                 next_state = ESPERANDO_PIN; 
             else
                 next_state = ESPERANDO_TARJETA;
-        ESPERANDO_PIN: begin// limpio el número al resetear
+        end 
+        ESPERANDO_PIN: begin
             if (DIGITO_STB) begin
                 if (contador_pin == 2'b11) begin
                     if (PIN_INGRESADO == PIN_CORRECTO) begin
@@ -102,12 +103,11 @@ always @(*) begin
                         else if (cont_errores == 2'b11) // Tercer error
                             next_state = BLOQUEO;
                         end
-                    end else begin
-                        next_state = ESPERANDO_PIN; // Si el contador de digitos aun no esta en 2'b11 sigue esperando pin
-                    end
+                end else begin
+                    next_state = ESPERANDO_PIN; // Si el contador de digitos aun no esta en 2'b11 sigue esperando pin
                 end
-            end 
-        end
+            end
+        end 
 
         PIN_INCORRECTO_1:  // ERROR 1
             next_state = ESPERANDO_PIN;
@@ -117,12 +117,6 @@ always @(*) begin
 
         ADVERTENCIA: 
             next_state = ESPERANDO_PIN;
-
-        ESPERANDO_RESET: 
-            if (reset == 0) begin
-                if (reset == 1)
-                    next_state = ESPERANDO_TARJETA;
-            end else next_state = BLOQUEO;
 
 
 
