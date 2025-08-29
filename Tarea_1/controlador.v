@@ -118,6 +118,7 @@ always @(*) begin
         ADVERTENCIA: 
             next_state = ESPERANDO_PIN;
 
-
+        
+    endcase
 
 end
