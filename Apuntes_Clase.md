@@ -88,3 +88,25 @@ end
 
 - Los ``assing`` se pueden utilizar para colocar variables intermedias, se tiene que poner fuera de los ``always`` y despues los puedo utilizar dentro de estos.
 
+-----------------------------------
+# Clase 29 Agosto
+
+- Se estará utilizando los programas del apartado de Ejemplo_Arbitro para ver todo lo que es la estructura de los programas que se deben tener. 
+
+![Estructura Programas](Semana1_pruebas_Software/Images/EstructuraProgram.png)
+
+- Si tengo elementos y solo los pongo como input u output se van a tomar por defecto como *wire*
+- Normalmente, como las salidad se manejan como *reg*, elementos almacenadores de memoria, donde se sostiene ese valor hasta que halla un cambio. 
+- Los wires son solo para acciones en las que debo recibir algo, por eso se le asignan a las entradas. Son valores que yo no puedo modificar. 
+
+------------
+
+#### Sobre la estructura
+
+- Lo que sale del probador va a ser la entrada del controlador/arbitro o programa. 
+- Las salidas de mi programa lógico pueden ser las entradas del probador para utilizarlas y manejar algunos datos o información de algún tipo de comportamiento específico. 
+
+*SUPER IMPORTANTE*
+- Agregar ``#numero $finish``
+- Los comandos que empiezan con *$* no son sintetizables, simplemente son instrucciones.
+
