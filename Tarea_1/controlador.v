@@ -1,5 +1,5 @@
 // Modulo del controlador del cajero
-module controlador(
+module Controlador(
     // Entradas 
     input clk; 
     input reset; 
@@ -118,7 +118,7 @@ always @(*) begin
         ADVERTENCIA: 
             next_state = ESPERANDO_PIN;
 
-        
+
     endcase
 
 end
