@@ -11,7 +11,6 @@ module Controlador(
     input MONTO_STB;
     input [31:0] MONTO; 
     input [63:0] BALANCE_INICIAL; 
-
     // Salidas 
     output BALANCE_STB; 
     output [63:0] BALANCE_ACTUALIZADO;
@@ -23,8 +22,8 @@ module Controlador(
 );
 
 // Definicion de estados 
-localparam  PIN_CORRECTO                = 16'b7259, //PIN CORRECTO DESIGNADO 
-            ESPERANDO_TARJETA           = 4'b0001,
+localparam  PIN_CORRECTO                = 16'b0111_0010_0101_1001 , //PIN CORRECTO DESIGNADO (7259)
+            ESPERANDO_TARJETA           = 4'b0001, // IDLE 
             ESPERANDO_PIN               = 4'b0010,
             BLOQUEO                     = 4'b0101,
             ADVERTENCIA                 = 4'b0110,
@@ -47,7 +46,7 @@ reg [1:0] cont_errores;
 
 // Declaracion para el cambio de estado y por si se llega a accionar el RESET
 
-always @(posedge clk or posedge reset) begin
+always @(posedge clk or negedge reset) begin
 
     if (!reset) begin
         state <= ESPERANDO_TARJETA;
@@ -92,7 +91,11 @@ always @(*) begin
             if (DIGITO_STB) begin
                 if (contador_pin == 2'b11) begin
                     if (PIN_INGRESADO == PIN_CORRECTO) begin
-                        next_state = RETIRO;
+                        if (TIPO_TRASN == 1)begin 
+                            next_state = RETIRO; 
+                        end else if (TIPO_TRASN == 0) begin
+                            next_state = DEPOSITO; 
+                        end
                         cont_errores <= 2'b00; // Resetear errores si acierta
                     end else begin
                         cont_errores <= cont_errores + 1; // Aumenta errores
@@ -109,16 +112,18 @@ always @(*) begin
             end
         end 
 
-        PIN_INCORRECTO_1:  // ERROR 1
+        PIN_INCORRECTO_1:  begin // ERROR 1
             next_state = ESPERANDO_PIN;
-
-        PIN_INCORRECTO_2:  // ERROR 2 
+        end
+        PIN_INCORRECTO_2: begin // ERROR 2
             next_state = ADVERTENCIA;
-
-        ADVERTENCIA: 
+        end 
+        ADVERTENCIA: begin 
             next_state = ESPERANDO_PIN;
-
+        end 
 
     endcase
 
 end
+
+endmodule
