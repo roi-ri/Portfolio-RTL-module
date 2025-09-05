@@ -110,3 +110,26 @@ end
 - Agregar ``#numero $finish``
 - Los comandos que empiezan con *$* no son sintetizables, simplemente son instrucciones.
 
+-------------------------------------------------
+
+# Apuntes clase 2 Septiembre
+
+
+
+ ### REPASO DE *MAKEFILES*
+
+simular: 
+    iverilog testbench.v
+    vpp a.out 
+    gtkwave resultados.vcd
+
+
+---------------------------------------
+# Apuntes clase 5 septiembre 
+### Síntesis 
+
+Pasar del método que se espera o comportamiento hacia compuertas 
+
+Se aplican todas las técnicas aprendidas en Digitales 1 y por medio de simplificaciones se plantean las configuraciones óptimas para la síntesis. 
+
+En este tipo de apartados es muy importante pensar en los elementos físicos como la parte de optimización obligando a realizar cambios en la lógica para poder adaptarlo y mejorar la parte física. 
