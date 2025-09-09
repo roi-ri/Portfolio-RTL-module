@@ -31,7 +31,7 @@ initial begin
     BLOQUEO              = 0;
     FONDOS_INSUFICIENTES = 0;
 
-
+ 
 
 
 
