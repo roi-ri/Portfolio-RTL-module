@@ -1,16 +1,16 @@
 // Modulo del controlador del cajero
 module Controlador(
     // Entradas 
-    input   clk,
-    input  reset, 
-    input   TARJETA_RECIBIDA,
-    input   TIPO_TRANS,
-    input   DIGITO_STB, 
-    input    MONTO_STB,
-    input   [3:0]  DIGITO, 
-    input   [15:0] PIN_CORRECTO, 
-    input   [31:0] MONTO, 
-    input   [63:0] BALANCE_INICIAL, 
+    input wire  clk,
+    input wire  reset, 
+    input wire  TARJETA_RECIBIDA,
+    input wire  TIPO_TRANS,
+    input wire  DIGITO_STB, 
+    input wire   MONTO_STB,
+    input wire  [3:0]  DIGITO, 
+    input wire  [15:0] PIN_CORRECTO, 
+    input wire  [31:0] MONTO, 
+    input wire  [63:0] BALANCE_INICIAL, 
     // Salidas 
     output reg BALANCE_STB, 
     output reg ENTREGA_DINERO, 
@@ -44,47 +44,39 @@ reg [15:0]  PIN_INGRESADO; //PARA COMPARAR CON PIN CORRECTO
 reg [1:0]   contador_pin; 
 reg [3:0]   contador_monto; 
 reg [1:0]   cont_errores; 
-
+reg reset_prev;
 
 // Declaracion para el cambio de estado y por si se llega a accionar el RESET
 
-always @(posedge clk || reset) begin
-
-    if (!reset) begin
+always @(posedge clk or posedge reset) begin
+    if (reset) begin
         state <= ESPERANDO_TARJETA;
-        PIN_INGRESADO <= 16'b0; // Resetear pin ingresado
-        contador_pin <= 2'b0; // Resetear contador de pin
-        contador_monto <= 4'b0; // Resetear contador de monto
-        cont_errores <= 2'b0; // Resetear contador de errores
+        BALANCE_STB         <= 0;
+        ENTREGA_DINERO      <= 0;
+        PIN_INCORRECTO      <= 0;
+        ADVERTENCIA         <= 0;
+        BLOQUEO             <= 0;
+        FONDOS_INSUFICIENTES<= 0;
     end else begin
         state <= next_state;
+        BALANCE_STB         <= (state == ACTUALIZAR_REGISTRO_BALANCE && TIPO_TRANS);
+        ENTREGA_DINERO      <= (state == ENTREGANDO_DINERO);
+        PIN_INCORRECTO      <= (state == PIN_INCORRECTO_1 || state == PIN_INCORRECTO_2);
+        ADVERTENCIA         <= (state == E_ADVERTENCIA);
+        BLOQUEO             <= (state == BLOQUEADO);
+        FONDOS_INSUFICIENTES<= (state == E_FONDOS_INSUFICIENTES);
     end
-
+    reset_prev <= reset;
     if (DIGITO_STB && state == ESPERANDO_PIN) begin
         PIN_INGRESADO <= {PIN_INGRESADO[11:0], DIGITO};
         contador_pin <= contador_pin + 1; // Aumentar el valor de contador para que cuando llegue a 4 -> 2'b11 (4 digitos ingresados)
     end
 
-    // Señales de salida
-
-    if (state == E_FONDOS_INSUFICIENTES) begin 
-        FONDOS_INSUFICIENTES = 1; 
+    if (state == ACTUALIZAR_REGISTRO_BALANCE && TIPO_TRANS) begin //Retiro
+        BALANCE_ACTUALIZADO <= BALANCE_INICIAL - MONTO;
+    end else if (state == ACTUALIZAR_REGISTRO_BALANCE && !TIPO_TRANS)begin  //Deposito
+        BALANCE_ACTUALIZADO <= BALANCE_INICIAL + MONTO;
     end 
-    
-    if (state == ENTREGANDO_DINERO) begin
-        ENTREGA_DINERO = 1; 
-    end 
-
-    if (sate == E_ADVERTENCIA) begin
-        ADVERTENCIA = 1; 
-    end
-
-    if (state = ACTUALIZAR_REGISTRO_BALANCE && !TIPO_TRANS) begin 
-        BALANCE_STB = 1; 
-    end 
-
-
-
 end
 
 
@@ -97,6 +89,10 @@ always @(*) begin
 
     case (state)
         ESPERANDO_TARJETA: begin
+            PIN_INGRESADO = 16'b0; // Resetear pin ingresado
+            contador_pin = 2'b0; // Resetear contador de pin
+            contador_monto = 4'b0; // Resetear contador de monto
+            cont_errores = 2'b0; // Resetear contador de errores
             next_state = (TARJETA_RECIBIDA) ? ESPERANDO_PIN : ESPERANDO_TARJETA;
         end
         ESPERANDO_PIN: begin
@@ -124,15 +120,13 @@ always @(*) begin
         ADVERTENCIA: begin 
             next_state = ESPERANDO_PIN;
         end 
-        BLOQUEO: begin 
-            if (reset == 0) begin
-                if (reset == 1) begin
-                    next_state <= ESPERANDO_TARJETA;
-                end else begin 
-                    state <= BLOQUEO;
-                end 
+        BLOQUEO: begin
+         // Detecta flanco de subida: reset_prev = 0 y reset = 1
+        if (reset_prev == 0 && reset == 1) begin
+            next_state = ESPERANDO_TARJETA;
+            end else begin
+                next_state = BLOQUEO;
             end
-
         end
 
         RETIRO: begin
@@ -150,18 +144,16 @@ always @(*) begin
             // Para actualizar los balances cuando los montos sean correctos 
             if (TIPO_TRANS && MONTO_STB) begin //RETIRO
                 if (MONTO > BALANCE_INICIAL) begin 
-                    BALANCE_ACTUALIZADO = BALANCE_ACTUALIZADO - MONTO;
                     next_state = E_FONDOS_INSUFICIENTES;
                 end else if (MONTO <= BALANCE_INICIAL) begin 
-                    BALANCE_ACTUALIZADO = BALANCE_INICIAL + MONTO; 
                     next_state = ACTUALIZAR_REGISTRO_BALANCE; 
                 end 
             end else if (!TIPO_TRANS && MONTO_STB) begin  // DEPOSITO
-                    BALANCE_ACTUALIZADO = BALANCE_INICIAL + MONTO; 
+                    next_state = ACTUALIZAR_REGISTRO_BALANCE;
             end else begin 
                 next_state = ESPERANDO_MONTO;
             end 
-
+        end 
         ACTUALIZAR_REGISTRO_BALANCE: begin 
             if (TIPO_TRANS)begin 
                 next_state = ENTREGANDO_DINERO; 
