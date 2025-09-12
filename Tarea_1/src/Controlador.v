@@ -40,7 +40,6 @@ localparam  ESPERANDO_TARJETA           = 12'b000000000001,
 reg [11:0]  state, next_state;
 reg [15:0]  PIN_INGRESADO; 
 reg [2:0]   contador_pin; 
- 
 reg [1:0]   cont_errores; 
 reg         reset_prev; 
 
@@ -49,27 +48,29 @@ always @(posedge clk or posedge reset) begin
     
     if (!reset) begin
         state               <= ESPERANDO_TARJETA;
-        contador_pin        <= 2'b0; // Resetear contador de pin
-        cont_errores        <= 2'b0; // Resetear contador de errores 
+        contador_pin        <= 2'b0;
+        cont_errores        <= 3'b0; 
         BALANCE_ACTUALIZADO <= 64'b0;
         BALANCE_STB         <= 0;
         ENTREGA_DINERO      <= 0;
         PIN_INCORRECTO      <= 0;
         ADVERTENCIA         <= 0;
-        BLOQUEO             <= 0;
+        BLOQUEO             <= 0; 
         FONDOS_INSUFICIENTES<= 0;
     end else begin
         state <= next_state;
         if (next_state == ESPERANDO_TARJETA) begin
             PIN_INGRESADO <= 16'b0;
             contador_pin  <= 3'b0;
-            cont_errores  <= 4'b0;
+            cont_errores  <= 2'b0;
         end
 
         if (DIGITO_STB && state == ESPERANDO_PIN && contador_pin <= 3'b011) begin
             PIN_INGRESADO <= (PIN_INGRESADO << 4) | DIGITO;
             contador_pin  <= contador_pin + 1;
-        end
+        end 
+
+
 
           // Actualiza balance
         if (state == ACTUALIZAR_REGISTRO_BALANCE && TIPO_TRANS) begin //Retiro
@@ -100,10 +101,11 @@ always @(*) begin
                 if (PIN_INGRESADO == PIN_CORRECTO) begin
                     next_state = (TIPO_TRANS) ? DEPOSITO : RETIRO ;
                 end else begin
+                    cont_errores = cont_errores + 1;
                     case (cont_errores)
                         2'b01: next_state = PIN_INCORRECTO_1;
                         2'b10: next_state = PIN_INCORRECTO_2;
-                        2'b11: next_state = BLOQUEO;
+                        2'b11: next_state = BLOQUEADO;
                         default: next_state = ESPERANDO_PIN; 
                     endcase
                 end 
@@ -111,12 +113,16 @@ always @(*) begin
         end
 
         PIN_INCORRECTO_1:  begin // ERROR 1
+            PIN_INGRESADO = 3'b0;
+            contador_pin  = 2'b0; 
             next_state = ESPERANDO_PIN;
         end
         PIN_INCORRECTO_2: begin // ERROR 2
-            next_state = ADVERTENCIA;
+            PIN_INGRESADO = 3'b0;
+            contador_pin  = 2'b0; 
+            next_state = E_ADVERTENCIA;
         end 
-        ADVERTENCIA: begin 
+        E_ADVERTENCIA: begin 
             next_state = ESPERANDO_PIN;
         end 
         BLOQUEO: begin

@@ -50,7 +50,7 @@ initial begin
     #10 DIGITO = 4'b1001; DIGITO_STB = 1;
     #10 DIGITO_STB = 0;
 
-    // Selecciona tipo de transacción (0 = depósito)
+    
     #5 TIPO_TRANS = 0;
 
     // Ingresa monto
@@ -83,13 +83,115 @@ initial begin
     #10 DIGITO = 4'b1001; DIGITO_STB = 1;
     #10 DIGITO_STB = 0;
 
-    // Selecciona tipo de transacción (0 = depósito)
+   
     #5 TIPO_TRANS = 1;
 
     // Ingresa monto
     #10 MONTO = 32'd50000;
     #5 MONTO_STB = 1;
     #10 MONTO_STB = 0;
+
+
+    //reset 
+    #50 reset = 0; 
+    #5 reset = 1; 
+    // PRUEBA 2
+    
+    BALANCE_INICIAL = 64'd5000;
+    // Inserta tarjeta
+    #10 TARJETA_RECIBIDA = 1;
+    #10 TARJETA_RECIBIDA = 0;
+
+    // Ingreso de PIN: 7
+    #10 DIGITO = 4'b0111; DIGITO_STB = 1;
+    #10 DIGITO_STB = 0;
+
+    // Ingreso de PIN: 2
+    #10 DIGITO = 4'b0010; DIGITO_STB = 1;
+    #10 DIGITO_STB = 0;
+
+    // Ingreso de PIN: 5
+    #10 DIGITO = 4'b0101; DIGITO_STB = 1;
+    #10 DIGITO_STB = 0;
+
+    // Ingreso de PIN: 9
+    #10 DIGITO = 4'b1001; DIGITO_STB = 1;
+    #10 DIGITO_STB = 0;
+
+    
+    #5 TIPO_TRANS = 1;
+
+    // Ingresa monto
+    #10 MONTO = 32'd50000;
+    #5 MONTO_STB = 1;
+    #10 MONTO_STB = 0;
+
+
+   //reset 
+    #50 reset = 0; 
+    #5 reset = 1; 
+
+    // PRUEBA 3
+    
+    // Inserta tarjeta
+    #10 TARJETA_RECIBIDA = 1;
+    #10 TARJETA_RECIBIDA = 0;
+
+    // Ingreso de PIN: 7
+    #10 DIGITO = 4'b0111; DIGITO_STB = 1;
+    #10 DIGITO_STB = 0;
+
+    // Ingreso de PIN: 3
+    #10 DIGITO = 4'b0011; DIGITO_STB = 1;
+    #10 DIGITO_STB = 0;
+
+    // Ingreso de PIN: 5
+    #10 DIGITO = 4'b0101; DIGITO_STB = 1;
+    #10 DIGITO_STB = 0;
+
+    // Ingreso de PIN: 9
+    #10 DIGITO = 4'b1001; DIGITO_STB = 1;
+    #10 DIGITO_STB = 0;
+
+    // Nuevo intento de PIN
+
+    // Ingreso de PIN: 7
+    #30 DIGITO = 4'b0111; DIGITO_STB = 1;
+    #10 DIGITO_STB = 0;
+
+    // Ingreso de PIN: 3
+    #10 DIGITO = 4'b0011; DIGITO_STB = 1;
+    #10 DIGITO_STB = 0;
+
+    // Ingreso de PIN: 5
+    #10 DIGITO = 4'b0101; DIGITO_STB = 1;
+    #10 DIGITO_STB = 0;
+
+    // Ingreso de PIN: 9
+    #10 DIGITO = 4'b1001; DIGITO_STB = 1;
+    #10 DIGITO_STB = 0;
+
+    // Nuevo intento de PIN
+
+    // Ingreso de PIN: 7
+    #30 DIGITO = 4'b0111; DIGITO_STB = 1;
+    #10 DIGITO_STB = 0;
+
+    // Ingreso de PIN: 3
+    #10 DIGITO = 4'b0011; DIGITO_STB = 1;
+    #10 DIGITO_STB = 0;
+
+    // Ingreso de PIN: 5
+    #10 DIGITO = 4'b0101; DIGITO_STB = 1;
+    #10 DIGITO_STB = 0;
+
+    // Ingreso de PIN: 9
+    #10 DIGITO = 4'b1001; DIGITO_STB = 1;
+    #10 DIGITO_STB = 0;
+    
+    // Reset para quitar el bloqueo. 
+    #55 reset = 0; 
+    #10 reset = 1; 
 
 
     // Espera a que termine la operación
