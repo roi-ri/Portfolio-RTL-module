@@ -36,21 +36,22 @@ localparam  ESPERANDO_TARJETA           = 12'b000000000001,
             PIN_INCORRECTO_2            = 12'b100000000000;
 
 
-
-
 // Datos internos del programa 
-reg [1:0]   state, next_state;
-reg [15:0]  PIN_INGRESADO; //PARA COMPARAR CON PIN CORRECTO
-reg [1:0]   contador_pin; 
-reg [3:0]   contador_monto; 
+reg [11:0]  state, next_state;
+reg [15:0]  PIN_INGRESADO; 
+reg [2:0]   contador_pin; 
+ 
 reg [1:0]   cont_errores; 
-reg reset_prev;
+reg         reset_prev; 
 
-// Declaracion para el cambio de estado y por si se llega a accionar el RESET
 
 always @(posedge clk or posedge reset) begin
-    if (reset) begin
-        state <= ESPERANDO_TARJETA;
+    
+    if (!reset) begin
+        state               <= ESPERANDO_TARJETA;
+        contador_pin        <= 2'b0; // Resetear contador de pin
+        cont_errores        <= 2'b0; // Resetear contador de errores 
+        BALANCE_ACTUALIZADO <= 64'b0;
         BALANCE_STB         <= 0;
         ENTREGA_DINERO      <= 0;
         PIN_INCORRECTO      <= 0;
@@ -59,47 +60,45 @@ always @(posedge clk or posedge reset) begin
         FONDOS_INSUFICIENTES<= 0;
     end else begin
         state <= next_state;
-        BALANCE_STB         <= (state == ACTUALIZAR_REGISTRO_BALANCE && TIPO_TRANS);
+        if (next_state == ESPERANDO_TARJETA) begin
+            PIN_INGRESADO <= 16'b0;
+            contador_pin  <= 3'b0;
+            cont_errores  <= 4'b0;
+        end
+
+        if (DIGITO_STB && state == ESPERANDO_PIN && contador_pin <= 3'b011) begin
+            PIN_INGRESADO <= (PIN_INGRESADO << 4) | DIGITO;
+            contador_pin  <= contador_pin + 1;
+        end
+
+          // Actualiza balance
+        if (state == ACTUALIZAR_REGISTRO_BALANCE && TIPO_TRANS) begin //Retiro
+            BALANCE_ACTUALIZADO <= BALANCE_INICIAL - MONTO;
+        end else if (state == ACTUALIZAR_REGISTRO_BALANCE && !TIPO_TRANS) begin //Deposito
+            BALANCE_ACTUALIZADO <= BALANCE_INICIAL + MONTO;
+        end
+
+        BALANCE_STB         <= (state == ACTUALIZAR_REGISTRO_BALANCE);
         ENTREGA_DINERO      <= (state == ENTREGANDO_DINERO);
         PIN_INCORRECTO      <= (state == PIN_INCORRECTO_1 || state == PIN_INCORRECTO_2);
         ADVERTENCIA         <= (state == E_ADVERTENCIA);
         BLOQUEO             <= (state == BLOQUEADO);
         FONDOS_INSUFICIENTES<= (state == E_FONDOS_INSUFICIENTES);
     end
-    reset_prev <= reset;
-    if (DIGITO_STB && state == ESPERANDO_PIN) begin
-        PIN_INGRESADO <= {PIN_INGRESADO[11:0], DIGITO};
-        contador_pin <= contador_pin + 1; // Aumentar el valor de contador para que cuando llegue a 4 -> 2'b11 (4 digitos ingresados)
-    end
-
-    if (state == ACTUALIZAR_REGISTRO_BALANCE && TIPO_TRANS) begin //Retiro
-        BALANCE_ACTUALIZADO <= BALANCE_INICIAL - MONTO;
-    end else if (state == ACTUALIZAR_REGISTRO_BALANCE && !TIPO_TRANS)begin  //Deposito
-        BALANCE_ACTUALIZADO <= BALANCE_INICIAL + MONTO;
-    end 
+    
 end
 
 
 always @(*) begin
-    next_state = state; 
-    PIN_INGRESADO   = 16'b0; // Resetear pin ingresado
-    contador_pin    = 2'b0; // Resetear contador de pin
-    contador_monto  = 4'b0; // Resetear contador de monto
-    cont_errores    = 2'b0; // Resetear contador de errores
-
+    next_state = state;
     case (state)
         ESPERANDO_TARJETA: begin
-            PIN_INGRESADO = 16'b0; // Resetear pin ingresado
-            contador_pin = 2'b0; // Resetear contador de pin
-            contador_monto = 4'b0; // Resetear contador de monto
-            cont_errores = 2'b0; // Resetear contador de errores
             next_state = (TARJETA_RECIBIDA) ? ESPERANDO_PIN : ESPERANDO_TARJETA;
         end
         ESPERANDO_PIN: begin
-            if (contador_pin == 2'b11) begin
+            if (contador_pin == 3'b100) begin
                 if (PIN_INGRESADO == PIN_CORRECTO) begin
-                    next_state = (TIPO_TRANS) ? RETIRO : DEPOSITO;
-                    cont_errores = 2'b00; // Resetear errores si acierta
+                    next_state = (TIPO_TRANS) ? DEPOSITO : RETIRO ;
                 end else begin
                     case (cont_errores)
                         2'b01: next_state = PIN_INCORRECTO_1;
@@ -148,7 +147,7 @@ always @(*) begin
                 end else if (MONTO <= BALANCE_INICIAL) begin 
                     next_state = ACTUALIZAR_REGISTRO_BALANCE; 
                 end 
-            end else if (!TIPO_TRANS && MONTO_STB) begin  // DEPOSITO
+            end else if (TIPO_TRANS == 0 && MONTO_STB) begin  // DEPOSITO
                     next_state = ACTUALIZAR_REGISTRO_BALANCE;
             end else begin 
                 next_state = ESPERANDO_MONTO;
