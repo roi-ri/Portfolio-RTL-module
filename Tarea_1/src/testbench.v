@@ -1,4 +1,4 @@
-`include "probador.v"
+`include "tester.v"
 `include "Controlador.v"
 
 // Testbench Code Goes here
