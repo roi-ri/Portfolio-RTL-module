@@ -236,7 +236,11 @@ initial begin
     #55 reset = 0; 
     #10 reset = 1; 
 
-    // Espera a que termine la operación
+
+
+
+
+    
     #100 $finish;
 end
 
