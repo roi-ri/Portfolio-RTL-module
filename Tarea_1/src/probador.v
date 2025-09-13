@@ -30,6 +30,8 @@ initial begin
 
     #10 reset = 1;
 
+// -------------------------------------------------------
+    // PRUEBA 1 
     // Inserta tarjeta
     #10 TARJETA_RECIBIDA = 1;
     #10 TARJETA_RECIBIDA = 0;
@@ -95,9 +97,11 @@ initial begin
     //reset 
     #50 reset = 0; 
     #5 reset = 1; 
+
+// -------------------------------------------------------
     // PRUEBA 2
     
-    BALANCE_INICIAL = 64'd5000;
+    BALANCE_INICIAL = 64'd500000;
     // Inserta tarjeta
     #10 TARJETA_RECIBIDA = 1;
     #10 TARJETA_RECIBIDA = 0;
@@ -131,8 +135,47 @@ initial begin
     #50 reset = 0; 
     #5 reset = 1; 
 
+// -------------------------------------------------------
     // PRUEBA 3
+    BALANCE_INICIAL = 64'd500;
+    // Inserta tarjeta
+    #10 TARJETA_RECIBIDA = 1;
+    #10 TARJETA_RECIBIDA = 0;
+
+    // Ingreso de PIN: 7
+    #10 DIGITO = 4'b0111; DIGITO_STB = 1;
+    #10 DIGITO_STB = 0;
+
+    // Ingreso de PIN: 2
+    #10 DIGITO = 4'b0010; DIGITO_STB = 1;
+    #10 DIGITO_STB = 0;
+
+    // Ingreso de PIN: 5
+    #10 DIGITO = 4'b0101; DIGITO_STB = 1;
+    #10 DIGITO_STB = 0;
+
+    // Ingreso de PIN: 9
+    #10 DIGITO = 4'b1001; DIGITO_STB = 1;
+    #10 DIGITO_STB = 0;
+
     
+    #5 TIPO_TRANS = 1;
+
+    // Ingresa monto
+    #10 MONTO = 32'd50000;
+    #5 MONTO_STB = 1;
+    #10 MONTO_STB = 0;
+
+
+   //reset 
+    #50 reset = 0; 
+    #5 reset = 1; 
+
+
+// -------------------------------------------------------
+
+//PRUEBA 4
+
     // Inserta tarjeta
     #10 TARJETA_RECIBIDA = 1;
     #10 TARJETA_RECIBIDA = 0;
@@ -192,7 +235,6 @@ initial begin
     // Reset para quitar el bloqueo. 
     #55 reset = 0; 
     #10 reset = 1; 
-
 
     // Espera a que termine la operación
     #100 $finish;
