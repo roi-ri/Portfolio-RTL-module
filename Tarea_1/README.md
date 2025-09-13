@@ -3,6 +3,7 @@
 **Autor:** Rodrigo E. Sánchez Araya (C37259)  
 **Profesor:** Enrique Coen Alfaro  
 **Fecha:** Septiembre 2025  
+Ver documento completo y detallado en el [PDF](Images/C37259.pdf)
 
 ---
 
@@ -120,7 +121,30 @@ Al finalizar, el sistema vuelve al estado inicial de espera de tarjeta.
 - **Monto:** rojo.  
 - **Balance:** violeta.  
 
-> **Nota:** se recomienda incluir la señal `state` para verificar cambios de estado (no se añadió en las capturas para evitar saturación visual).  
+---
+## Instrucciones de Uso de la Simulación
+
+Para ejecutar el programa se requiere tener el siguiente acomodo en el directorio:
+
+Directorio/Carpeta
+- Makefile          
+- src               
+    - Controlador.v 
+    - testbench.v   
+    - probador.v    
+
+La forma de ejecutar el programa se muestra a continuación:
+
+```bash
+# Se debe estar dentro del directorio o carpeta
+cd /Sist.Digitales2/Tarea1  # ejemplo de ruta
+
+# Compilar y ejecutar el proyecto
+make
+
+# Limpiar archivos temporales
+make clean
+```
 
 ---
 
