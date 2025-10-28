@@ -106,6 +106,8 @@ module probador(
         $display("    Transaccion abortada por RESET");
         $display("");
 
+        
+
         // ========================================
         // PRUEBA 4: ADDRESS NO MATCH
         // ========================================
@@ -124,10 +126,8 @@ module probador(
         #CLK_PERIOD;
         START_STB = 0;
 
-
-        reset = 0;
-        #30;
-        reset = 1;
+        
+ 
 
         // Esperar a que termine la transacción
         #1200;

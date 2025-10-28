@@ -103,7 +103,6 @@ module Generator_I2C(
         end
     end
 
-
     always @(posedge clk or negedge reset) begin
         if (!reset) begin
             clk_div <= 2'd0;
@@ -124,7 +123,6 @@ module Generator_I2C(
         end
     end
 
- \
     always @(*) begin
         // Defaults
         next_state = state;
