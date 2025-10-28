@@ -57,7 +57,7 @@ module I2C_tb;
         .SDA_OUT  (SDA_OUT_master), // maestro intenta conducir
         .SDA_OE   (SDA_OE_master),
         .SCL      (SCL)
-        // removed: internal-only *_next ports (were not module ports)
+        
     );
 
     // Instancia del Slave (puertos según Slave_I2C.v)
