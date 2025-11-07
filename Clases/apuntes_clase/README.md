@@ -132,4 +132,54 @@ Pasar del método que se espera o comportamiento hacia compuertas
 
 Se aplican todas las técnicas aprendidas en Digitales 1 y por medio de simplificaciones se plantean las configuraciones óptimas para la síntesis. 
 
-En este tipo de apartados es muy importante pensar en los elementos físicos como la parte de optimización obligando a realizar cambios en la lógica para poder adaptarlo y mejorar la parte física. 
+En este tipo de apartados es muy importante pensar en los elementos físicos como la parte de optimización obligando a realizar cambios en la lógica para poder adaptarlo y mejorar la parte física.
+
+------
+# Protocolos de Ethernet
+
+Generate code groups: 
+
+- Config: no la vamos a utilizar 
+
+- Caracteres especiales
+
+- Casos de disparidad
+
+Vamos a seleccionar el codigo de dato que viene despues de K28.5
+
+
+- Tx_even: caracter de "," -> Ciclo par
+
+Ciclo siguente es impar
+
+
+### Maquina de estados de transmision
+
+
+Enviar informacion en el formato del diagrama de tiempo. 
+
+DIferencias si vamos a caso de configuracion (No lo vamos a trabajar)
+
+La otra alternativa es pasar a la condicion del estado IDLE
+
+Si se tiene lo siguiente: 
+
+```
+TX_EN = TRUE + TX_ER = TRUE 
+// Hasta que tenga una senial:
+//Con: TX_OSET  
+TX_EN = FALSE + TX_ER = FALSE 
+
+```
+
+Estado "Normal o deseado": 
+
+TX_EN = TX_ER =  FALSE 
+
+Vamos a transmit data, enviando el codigo de IDLE hasta recibir el tx_o_set <- /l/
+
+Estado: Alling_error_START: trasnmiting <- TRUE, COL <- receiving y tx_o_set <- /S/
+
+En el proyecto no se hacen los casos de error. 
+
+
