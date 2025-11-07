@@ -44,7 +44,7 @@ reg [1:0]   cont_errores;
 reg         reset_prev; 
 
 
-always @(posedge clk or posedge reset) begin
+always @(posedge clk or negedge reset) begin
     
     if (!reset) begin
         state               <= ESPERANDO_TARJETA;
