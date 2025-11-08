@@ -14,6 +14,9 @@ module master (
 
 
 
+/*
+ESTADOS DE MAQUINA DE ESTADOS
+*/
 
 localparam  IDLE            = 8'b00000001, 
             MODE_0          = 8'b00000010, 
@@ -209,29 +212,32 @@ always @(*) begin
 end
 
 always @(posedge SCK) begin 
-    if (p_SCK == 1 && CS == 0) begin 
-        MOSI <= data_to_send[bit_cont]; 
-        bit_cont <= bit_cont - 1; 
-        // Si tambien tiene que recibir
-        if (state == S_R_DATA) begin 
-            recieved_data <= MISO;
-            bits_recieved <= bits_recieved + 1; 
-        end 
-    end 
+    if (state == S_R_DATA || state == RECIEVE_DATA || state == SEND_DATA)begin 
+        if (p_SCK == 1 && CS == 0) begin 
+            MOSI <= data_to_send[bit_cont]; 
+            bit_cont <= bit_cont - 1; 
+            // Si tambien tiene que recibir
+            if (state == S_R_DATA) begin 
+                recieved_data <= MISO;
+                bits_recieved <= bits_recieved + 1; 
+            end 
+        end
+    end  
 end 
 
 
 always @(negedge SCK) begin 
-    if (p_SCK == 0 && CS == 0) begin 
-        MOSI <= data_to_send[bit_cont]; 
-        bit_cont <= bit_cont - 1; 
-        // Si tambien tiene que recibir
-        if (state == S_R_DATA) begin 
-            recieved_data <= MISO;
-            bits_recieved <= bits_recieved + 1; 
+    if (state == S_R_DATA || state == RECIEVE_DATA || state == SEND_DATA)begin 
+        if (p_SCK == 0 && CS == 0) begin 
+            MOSI <= data_to_send[bit_cont]; 
+            bit_cont <= bit_cont - 1; 
+            // Si tambien tiene que recibir
+            if (state == S_R_DATA) begin 
+                recieved_data <= MISO;
+                bits_recieved <= bits_recieved + 1; 
+            end 
         end 
     end 
-
 end 
 
 endmodule
