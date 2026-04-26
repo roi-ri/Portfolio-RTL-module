@@ -1,4 +1,4 @@
-# Reporte Tarea 1
+# Controlador de Cajero Automático
 
 **Autor:** Rodrigo E. Sánchez Araya (C37259)  
 **Profesor:** Enrique Coen Alfaro  
@@ -131,13 +131,13 @@ Directorio/Carpeta
 - src               
     - Controlador.v 
     - testbench.v   
-    - probador.v    
+    - tester.v    
 
 La forma de ejecutar el programa se muestra a continuación:
 
 ```bash
 # Se debe estar dentro del directorio o carpeta
-cd /Sist.Digitales2/Tarea1  # ejemplo de ruta
+cd /Sist.Digitales2/Modules/Controlador_Cajero_Automatico  # ejemplo de ruta
 
 # Compilar y ejecutar el proyecto
 make

@@ -1,7 +1,7 @@
 `timescale 1ns/1ps
-`include "Master.v"
-`include "Slave_1.v"
-`include "Slave_2.v"
+`include "Master_SPI.v"
+`include "Slave_1_SPI.v"
+`include "Slave_2_SPI.v"
 `include "tester.v"
 
 

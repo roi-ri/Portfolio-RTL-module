@@ -1,4 +1,4 @@
-# Reporte Tarea 2
+# Síntesis del Controlador de Cajero
 
 **Estudiante:** Rodrigo E. Sánchez Araya. C37259  
 **Profesor:** Enrique Coen Alfaro  
@@ -6,11 +6,11 @@
 
 ## Resumen
 
-Se implementó la etapa de síntesis del diseño utilizado en la tarea 1, generando versiones sintetizadas del controlador utilizando celdas CMOS y considerando retardos de propagación. Esto permitió evaluar el comportamiento del circuito a nivel de puertas lógicas y verificar su funcionalidad bajo condiciones más cercanas a la implementación física. La síntesis facilitó la generación de netlists optimizados y archivos listos para una posterior implementación en hardware, asegurando que la lógica diseñada en RTL se mantiene correcta y eficiente tras la conversión a nivel de celdas.
+Se implementó la etapa de síntesis del diseño utilizado en el caso del controlador de cajero, generando versiones sintetizadas del controlador utilizando celdas CMOS y considerando retardos de propagación. Esto permitió evaluar el comportamiento del circuito a nivel de puertas lógicas y verificar su funcionalidad bajo condiciones más cercanas a la implementación física. La síntesis facilitó la generación de netlists optimizados y archivos listos para una posterior implementación en hardware, asegurando que la lógica diseñada en RTL se mantiene correcta y eficiente tras la conversión a nivel de celdas.
 
 ## Descripción Arquitectónica
 
-Se mantiene el planteamiento arquitectónico planteado para la tarea 1.
+Se mantiene el planteamiento arquitectónico planteado para el controlador de cajero automático.
 
 ### Diagrama ASM
 
@@ -61,7 +61,7 @@ Directorio/Carpeta
 
 ```bash
 # Entrar al directorio del proyecto
-cd /Sist.Digitales2/Tarea2
+cd /Sist.Digitales2/Modules/Sintesis_Controlador_Cajero
 
 # 1. Simulación RTL original
 make all

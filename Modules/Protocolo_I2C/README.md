@@ -1,4 +1,4 @@
-# Proyecto I2C – Tarea 4
+# Protocolo I2C
 
 **Estudiante:** Rodrigo E. Sánchez Araya – C37259  
 **Profesor:** Enrique Coen Alfaro  

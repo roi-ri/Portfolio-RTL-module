@@ -10,7 +10,7 @@ VCD     = resultados.vcd
 all: run wave
 
 compile:
-	@echo "Compilando Tarea 5..."
+	@echo "Compilando Protocolo SPI..."
 	iverilog -I $(SRC_DIR) -o $(OUT) $(SRC)
 
 run: compile

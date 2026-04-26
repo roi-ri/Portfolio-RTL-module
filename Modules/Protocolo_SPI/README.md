@@ -1,5 +1,5 @@
 # Comunicación SPI Maestro–Esclavos en Verilog  
-### Proyecto Tarea 5 — Rodrigo E. Sánchez Araya (C37259)
+### Proyecto Protocolo SPI — Rodrigo E. Sánchez Araya (C37259)
 
 ## 🧩 Resumen
 
@@ -56,13 +56,13 @@ En todos los casos se validó la transmisión de los datos `00000111` (7) y `000
 
 **Estructura de directorios:**
 ```
-📁 Proyecto_SPI/
+📁 Modules/Protocolo_SPI/
 ├── Makefile
 ├── README.md
 └── src/
-    ├── Master.v
-    ├── Slave_1.v
-    ├── Slave_2.v
+    ├── Master_SPI.v
+    ├── Slave_1_SPI.v
+    ├── Slave_2_SPI.v
     ├── tester.v
     └── testbench.v
 ```
