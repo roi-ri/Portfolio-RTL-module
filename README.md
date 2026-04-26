@@ -1,5 +1,8 @@
 [![Licencia](https://img.shields.io/badge/Licencia-MIT-green.svg)](LICENSE)
 # RTL Portfolio 
+---
+This repository documents my first hands-on contact with RTL design and Verilog. Each module was built from specification to simulation, with the ATM controller extended to RTL synthesis using Yosys.
+---
 Los proyectos principales se encuentran en el directorio [`Modules`](Modules), donde cada caso incluye su código fuente en Verilog, banco de pruebas, Makefile y documentación específica.
 
 ## Estructura general
